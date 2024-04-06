@@ -1,0 +1,641 @@
+PROJECT 1 DATABASE
+NAMA : FARIDA RABBANI VIRDYNATA
+KELAS : TI02 2023
+
+
+
+1. MEMBUAT DATA BASE :
+
+MariaDB [(none)]> CREATE DATABASE dbpegawai;
+Query OK, 1 row affected (0.002 sec)
+
+2. MASUK KE DATA BASE :
+
+MariaDB [(none)]> USE dbpegawai;
+Database changed
+
+3. MEMBUAT TABEL DIVISI : 
+MariaDB [dbpegawai]> CREATE TABLE divisi (
+    -> id INT PRIMARY KEY AUTO_INCREMENT,
+    -> nama VARCHAR (30) NOT NULL UNIQUE);
+Query OK, 0 rows affected (0.047 sec)
+
+4. MENAMPILKAN DESKRIPSI TABEL DIVISI :
+
+MariaDB [dbpegawai]> DESC divisi;
++-------+-------------+------+-----+---------+----------------+
+| Field | Type        | Null | Key | Default | Extra          |
++-------+-------------+------+-----+---------+----------------+
+| id    | int(11)     | NO   | PRI | NULL    | auto_increment |
+| nama  | varchar(30) | NO   | UNI | NULL    |                |
++-------+-------------+------+-----+---------+----------------+
+2 rows in set (0.032 sec)
+
+5. MEMBUAT TABEL JABATAN :
+MariaDB [dbpegawai]> CREATE TABLE jabatan (
+    -> id INT PRIMARY KEY AUTO_INCREMENT,
+    -> nama VARCHAR (30) NOT NULL UNIQUE);
+Query OK, 0 rows affected (0.042 sec)
+
+6. MENAMPILKAN DESKRIPSI TABEL JABATAN :
+
+MariaDB [dbpegawai]> DESC jabatan;
++-------+-------------+------+-----+---------+----------------+
+| Field | Type        | Null | Key | Default | Extra          |
++-------+-------------+------+-----+---------+----------------+
+| id    | int(11)     | NO   | PRI | NULL    | auto_increment |
+| nama  | varchar(30) | NO   | UNI | NULL    |                |
++-------+-------------+------+-----+---------+----------------+
+2 rows in set (0.026 sec)
+
+7. MEMBUAT TABEL PEGAWAI :
+
+MariaDB [dbpegawai]> CREATE TABLE pegawai (
+    -> id INT PRIMARY KEY AUTO_INCREMENT,
+    -> nip CHAR (5) NOT NULL UNIQUE,
+    -> nama VARCHAR (30) NOT NULL,
+    -> gender ENUM ('Laki-laki','Perempuan') NOT NULL,
+    -> tmp_lahir VARCHAR (30) NOT NULL,
+    -> tgl_lahir DATE NOT NULL,
+    -> iddivisi INT NOT NULL,
+    -> idjabatan INT NOT NULL,
+    -> alamat TEXT,
+    -> FOREIGN KEY (iddivisi) REFERENCES divisi (id),
+    -> FOREIGN KEY (idjabatan) REFERENCES jabatan (id));
+Query OK, 0 rows affected (0.046 sec)
+
+8. MENAMPILKAN DESKRIPSI TABEL PEGAWAI :
+ 
+MariaDB [dbpegawai]> DESC pegawai;
++-----------+-------------------------------+------+-----+---------+----------------+
+| Field     | Type                          | Null | Key | Default | Extra          |
++-----------+-------------------------------+------+-----+---------+----------------+
+| id        | int(11)                       | NO   | PRI | NULL    | auto_increment |
+| nip       | char(5)                       | NO   | UNI | NULL    |                |
+| nama      | varchar(30)                   | NO   |     | NULL    |                |
+| gender    | enum('Laki-laki','Perempuan') | NO   |     | NULL
+   |                |
+| tmp_lahir | varchar(30)                   | NO   |     | NULL    |                |
+| tgl_lahir | date                          | NO   |     | NULL    |                |
+| iddivisi  | int(11)                       | NO   | MUL | NULL    |                |
+| idjabatan | int(11)                       | NO   | MUL | NULL    |                |
+| alamat    | text                          | YES  |     | NULL    |                |
++-----------+-------------------------------+------+-----+---------+----------------+
+9 rows in set (0.025 sec)
+
+9. MENAMPILKAN TABEL TABEL PADA DATABASE DBPEGAWAI :
+
+MariaDB [dbpegawai]> SHOW TABLES;
++---------------------+
+| Tables_in_dbpegawai |
++---------------------+
+| divisi              |
+| jabatan             |
+| pegawai             |
++---------------------+
+3 rows in set (0.001 sec)
+
+10. INPUT DATA PADA TABEL DIVISI :
+
+MariaDB [dbpegawai]> INSERT INTO divisi (nama) VALUES ('SDM'), ('Keuangan'),('Marketing'),('IT');
+Query OK, 4 rows affected (0.075 sec)
+Records: 4  Duplicates: 0  Warnings: 0
+
+11. MENAMPILKAN DATA DIVISI : 
+MariaDB [dbpegawai]> SELECT * FROM divisi;
++----+------------+
+| id | nama       |
++----+------------+
+|  4 | IT         |
+|  2 | Keuangan   |
+|  3 | Marketing |
+|  1 | SDM        |
++----+------------+
+4 rows in set (0.007 sec)
+
+12. INPUT DATA PADA TABEL JABATAN : 
+
+MariaDB [dbpegawai]> INSERT INTO jabatan (nama) VALUES ('Direktur'), ('Manajer'), ('Asisten Manajer'), ('Staff');
+Query OK, 4 rows affected (0.009 sec)
+Records: 4  Duplicates: 0  Warnings: 0
+
+13. MENAMPILKAN DATA JABATAN :
+
+MariaDB [dbpegawai]> SELECT * FROM jabatan;
++----+-----------------+
+| id | nama            |
++----+-----------------+
+|  3 | Asisten Manajer |
+|  1 | Direktur        |
+|  2 | Manajer         |
+|  4 | Staff           |
++----+-----------------+
+4 rows in set (0.001 sec)
+
+14. INPUT 20 ORANG PEGAWAI (1 DIVISI 5 ORANG) :
+ 
+MariaDB [dbpegawai]> INSERT INTO pegawai (nip, nama, gender, tmp_lahir, tgl_lahir, iddivisi, idjabatan, alamat) VALUES
+    -> ('10001', 'Watanabe Haruto','Laki-laki', 'Fukuoka', '1982-04-05', 1, 2, 'YG Ent'),
+    -> ('10002', 'Lee Taeyong','Laki-laki', 'Rumah Sakit', '1995-07-01', 1, 1, 'SM Tower'),
+    -> ('10003', 'Lee Haikal','Laki-laki', 'Korea Selatan', '2000-06-06', 1, 3, 'Citayam'),
+    -> ('10004', 'Ariel','Perempuan', 'Rumah Sakit', '1991-06-10', 1, 3, 'Danau Citayam'),
+    -> ('10005', 'Sulastri','Perempuan', 'Bojong', '1997-08-12', 1, 4, 'Bojonh'),
+    -> ('20006', 'Karina Maniez','Perempuan', 'Jakarta', '1989-06-09', 2, 1, 'Kwangya'),
+    -> ('20007', 'Jefri Nackal','Laki-laki', 'Rumah Sakit', '1983-10-25', 2, 2, 'Bogor'),
+    -> ('20008', 'Muhammad Yuta','Laki-laki', 'Jepang', '1995-10-26', 2, 4, 'SM Ent'),
+    -> ('20009', 'Doby Soleh','Laki-laki', 'Bekasi', '1980-12-04', 2, 3, 'YG Ent'),
+    -> ('20010', 'Lisa Sulisa','Perempuan', 'Thailand', '1997-03-27', 2, 4, 'Depok'),
+    -> ('30011', 'Siti Ryujin','Perempuan', 'Jakarta', '1990-04-17', 3, 1, 'Jakarta'),
+    -> ('30012', 'Sumanto Santoso','Laki-laki', 'Purwakarta', '1999-12-01', 3, 2, 'Bandung'),
+    -> ('30013', 'Asahi Aseptian','Laki-laki', 'Jakarta', '2001-08-20', 3, 3, 'Bandung'),
+    -> ('30014', 'Aya Susanti','Perempuan', 'Sulawesi', '1993-01-12', 3, 4, 'Citayam'),
+    -> ('30025', 'Meimei Comel','Perempuan', 'Sawangan Depok', '1999-02-28', 3, 4, 'Tangerang'),
+    -> ('40016', 'Muhammad Jaehyun','Laki-laki', 'Depok', '1997-02-14', 4, 1, 'Bogor'),
+    -> ('40017', 'Mark Lee','Perempuan', 'Jonggol', '1999-08-02', 4, 2, 'Jakarta'),
+    -> ('40018', 'Yuna Yuniati','Perempuan', 'Korea Selatan', '2003-12-09', 4, 4, 'Jakarta'),
+    -> ('40019', 'Markonah','Perempuan', 'Jakarta', '2005-09-18', 4, 4, 'Lenteng Agung'),
+    -> ('40200', 'Tio Hartanto','Laki-laki', 'Depok', '1996-12-01', 4, 4, 'Pasar Minggu');
+Query OK, 20 rows affected (0.008 sec)
+Records: 20  Duplicates: 0  Warnings: 0
+
+15. MENAMPILKAN SELURUH DATA PEGAWAI :
+
+MariaDB [dbpegawai]> SELECT * FROM pegawai;
++----+-------+------------------+-----------+----------------+------------+----------+-----------+---------------+
+| id | nip   | nama             | gender    | tmp_lahir      | tgl_lahir  | iddivisi | idjabatan | alamat        |
++----+-------+------------------+-----------+----------------+------------+----------+-----------+---------------+
+|  1 | 10001 | Watanabe Haruto  | Laki-laki | Fukuoka        | 1982-04-05 |        1 |         2 | YG Ent        |
+|  2 | 10002 | Lee Taeyong      | Laki-laki | Rumah Sakit    | 1995-07-01 |        1 |         1 | SM Tower      |
+|  3 | 10003 | Lee Haikal       | Laki-laki | Korea Selatan  | 2000-06-06 |        1 |         3 | Citayam       |
+|  4 | 10004 | Ariel            | Perempuan | Rumah Sakit    | 1991-06-10 |        1 |         3 | Danau Citayam |
+|  5 | 10005 | Sulastri         | Perempuan | Bojong         | 1997-08-12 |        1 |         4 | Bojonh        |
+|  6 | 20006 | Karina Maniez    | Perempuan | Jakarta        | 1989-06-09 |        2 |         1 | Kwangya       |
+|  7 | 20007 | Jefri Nackal     | Laki-laki | Rumah Sakit    | 1983-10-25 |        2 |         2 | Bogor         |
+|  8 | 20008 | Muhammad Yuta    | Laki-laki | Jepang         | 1995-10-26 |        2 |         4 | SM Ent        |
+|  9 | 20009 | Doby Soleh       | Laki-laki | Bekasi         | 1980-12-04 |        2 |         3 | YG Ent        |
+| 10 | 20010 | Lisa Sulisa      | Perempuan | Thailand       | 1997-03-27 |        2 |         4 | Depok         |
+| 11 | 30011 | Siti Ryujin      | Perempuan | Jakarta        | 1990-04-17 |        3 |         1 | Jakarta       |
+| 12 | 30012 | Sumanto Santoso  | Laki-laki | Purwakarta     | 1999-12-01 |        3 |         2 | Bandung       |
+| 13 | 30013 | Asahi Aseptian   | Laki-laki | Jakarta        | 2001-08-20 |        3 |         3 | Bandung       |
+| 14 | 30014 | Aya Susanti      | Perempuan | Sulawesi       | 1993-01-12 |        3 |         4 | Citayam       |
+| 15 | 30025 | Meimei Comel     | Perempuan | Sawangan Depok | 1999-02-28 |        3 |         4 | Tangerang     |
+| 16 | 40016 | Muhammad Jaehyun | Laki-laki | Depok          | 1997-02-14 |        4 |         1 | Bogor         |
+| 17 | 40017 | Mark Lee         | Perempuan | Jonggol        | 1999-08-02 |        4 |         2 | Jakarta       |
+| 18 | 40018 | Yuna Yuniati     | Perempuan | Korea Selatan  | 2003-12-09 |        4 |         4 | Jakarta       |
+| 19 | 40019 | Markonah         | Perempuan | Jakarta        | 2005-09-18 |        4 |         4 | Lenteng Agung |
+| 20 | 40200 | Tio Hartanto     | Laki-laki | Depok          | 1996-12-01 |        4 |         4 | Pasar Minggu  |
++----+-------+------------------+-----------+----------------+------------+----------+-----------+---------------+
+20 rows in set (0.001 sec)
+
+16. MENGUBAH 5 DATA PEGAWAI (UBAH 3 KOLOM )
+
+MariaDB [dbpegawai]> UPDATE pegawai SET tgl_lahir = '1995-11-20', idjabatan = 3, alamat = 'Cipayung' WHERE id=8;
+Query OK, 1 row affected (0.011 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+MariaDB [dbpegawai]> UPDATE pegawai SET nama = 'Meimei Cantik',idjabatan = 3, alamat = 'Bandung' WHERE nip=30015;
+Query OK, 0 rows affected (0.001 sec)
+Rows matched: 0  Changed: 0  Warnings: 0
+
+MariaDB [dbpegawai]> UPDATE pegawai SET nama = 'Susi Sulastri',tgl_lahir = '1998-08-12', alamat = 'Bojong' WHERE id=5;
+Query OK, 1 row affected (0.008 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+MariaDB [dbpegawai]> UPDATE pegawai SET nip = '40020', tmp_lahir = 'Bogor', idjabatan = 3 WHERE id=20;
+Query OK, 1 row affected (0.008 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+MariaDB [dbpegawai]> UPDATE pegawai SET gender = 'Laki-laki', tmp_lahir = 'Jakarta', alamat = 'Kelapa Dua' WHERE id=17;
+Query OK, 1 row affected (0.008 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+17. HAPUS 2 ORANG PEGAWAI TERAKHIR :
+
+MariaDB [dbpegawai]> DELETE FROM pegawai ORDER BY id DESC LIMIT2;
+Query OK, 2 rows affected (0.039 sec)
+
+18. MENAMBAHKAN KOLOM BARU (BERAT BADAN) DAN INPUT BERAT BADANNYA SECARA ACAK :
+
+MariaDB [dbpegawai]> ALTER TABLE pegawai ADD berat_badan FLOAT NOT NULL;
+Query OK, 0 rows affected (0.016 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+
+MariaDB [dbpegawai]> UPDATE pegawai SET berat_badan = ROUND(RAND() * (70-40) + 40, 1);
+Query OK, 18 rows affected (0.009 sec)
+Rows matched: 18  Changed: 18  Warnings: 0
+
+19. MENAMBAHKAN KOLOM BARU (UMUR) DAN INPUT UMUR :
+
+MariaDB [dbpegawai]> ALTER TABLE pegawai ADD umur INT NOT NULL;
+Query OK, 0 rows affected (0.015 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+MariaDB [dbpegawai]> UPDATE pegawai SET umur = timestampdiff (year, tgl_lahir, curdate());
+Query OK, 18 rows affected (0.010 sec)
+Rows matched: 18  Changed: 18  Warnings: 0
+
+20. MENGUBAH NAMA KOLOM GENDER MENJADI JENIS_KELAMIN : 
+
+MariaDB [dbpegawai]> ALTER TABLE pegawai CHANGE COLUMN gender jenis_kelamin ENUM ('Laki-laki','Perempuan') NOT NULL;
+Query OK, 0 rows affected (0.009 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+21. MENAMPILKAN KOLOM TERTENTU (NIP, NAMA, JENIS_KELAMIN, DAN ALAMAT):
+
+MariaDB [dbpegawai]> SELECT nip, nama, jenis_kelamin, alamat FROM pegawai;
++-------+------------------+---------------+---------------+
+| nip   | nama             | jenis_kelamin | alamat        |
++-------+------------------+---------------+---------------+
+| 10001 | Watanabe Haruto  | Laki-laki     | YG Ent        |
+| 10002 | Lee Taeyong      | Laki-laki     | SM Tower      |
+| 10003 | Lee Haikal       | Laki-laki     | Citayam       |
+| 10004 | Ariel            | Perempuan     | Danau Citayam |
+| 10005 | Susi Sulastri    | Perempuan     | Bojong        |
+| 20006 | Karina Maniez    | Perempuan     | Kwangya       |
+| 20007 | Jefri Nackal     | Laki-laki     | Bogor         |
+| 20008 | Muhammad Yuta    | Laki-laki     | Cipayung      |
+| 20009 | Doby Soleh       | Laki-laki     | YG Ent        |
+| 20010 | Lisa Sulisa      | Perempuan     | Depok         |
+| 30011 | Siti Ryujin      | Perempuan     | Jakarta       |
+| 30012 | Sumanto Santoso  | Laki-laki     | Bandung       |
+| 30013 | Asahi Aseptian   | Laki-laki     | Bandung       |
+| 30014 | Aya Susanti      | Perempuan     | Citayam       |
+| 30025 | Meimei Comel     | Perempuan     | Tangerang     |
+| 40016 | Muhammad Jaehyun | Laki-laki     | Bogor         |
+| 40017 | Mark Lee         | Laki-laki     | Kelapa Dua    |
+| 40018 | Yuna Yuniati     | Perempuan     | Jakarta       |
++-------+------------------+---------------+---------------+
+18 rows in set (0.001 sec)
+
+22. MENAMPILKAN BARIS TERTENTU (PEGAWAI BERJENIS KELAMIN LAKI LAKI SAJA)
+
+MariaDB [dbpegawai]> SELECT * FROM pegawai WHERE jenis_kelamin='Laki-laki';
++----+-------+------------------+---------------+---------------+------------+----------+-----------+------------+-------------+------+
+| id | nip   | nama             | jenis_kelamin | tmp_lahir     | tgl_lahir  | iddivisi | idjabatan | alamat     | berat_badan | umur |
++----+-------+------------------+---------------+---------------+------------+----------+-----------+------------+-------------+------+
+|  1 | 10001 | Watanabe Haruto  | Laki-laki     | Fukuoka       | 1982-04-05 |        1 |         2 | YG Ent     |        61.5 |   42 |
+|  2 | 10002 | Lee Taeyong      | Laki-laki     | Rumah Sakit   | 1995-07-01 |        1 |         1 | SM Tower   |          43 |   28 |
+|  3 | 10003 | Lee Haikal       | Laki-laki     | Korea Selatan | 2000-06-06 |        1 |         3 | Citayam    |        50.6 |   23 |
+|  7 | 20007 | Jefri Nackal     | Laki-laki     | Rumah Sakit   | 1983-10-25 |        2 |         2 | Bogor      |        63.3 |   40 |
+|  8 | 20008 | Muhammad Yuta    | Laki-laki     | Jepang        | 1995-11-20 |        2 |         3 | Cipayung   |        44.5 |   28 |
+|  9 | 20009 | Doby Soleh       | Laki-laki     | Bekasi        | 1980-12-04 |        2 |         3 | YG Ent     |        52.7 |   43 |
+| 12 | 30012 | Sumanto Santoso  | Laki-laki     | Purwakarta    | 1999-12-01 |        3 |         2 | Bandung    |        43.7 |   24 |
+| 13 | 30013 | Asahi Aseptian   | Laki-laki     | Jakarta       | 2001-08-20 |        3 |         3 | Bandung    |        56.8 |   22 |
+| 16 | 40016 | Muhammad Jaehyun | Laki-laki     | Depok
+| 1997-02-14 |        4 |         1 | Bogor      |        41.4 |   27 |
+| 17 | 40017 | Mark Lee         | Laki-laki     | Jakarta       | 1999-08-02 |        4 |         2 | Kelapa Dua |          65 |   24 |
++----+-------+------------------+---------------+---------------+------------+----------+-----------+------------+-------------+------+
+10 rows in set (0.001 sec)
+
+23. TAMPILKAN BARIS TERTENTU (DIVISI IT DAN JENIS KELAMIN PEREMPUAN) 
+
+MariaDB [dbpegawai]> SELECT * FROM pegawai WHERE iddivisi = 4 AND jenis_kelamin = 'Perempuan';
++----+-------+--------------+---------------+---------------+------------+----------+-----------+---------+-------------+------+
+| id | nip   | nama         | jenis_kelamin | tmp_lahir     | tgl_lahir  | iddivisi | idjabatan | alamat  | berat_badan | umur |
++----+-------+--------------+---------------+---------------+------------+----------+-----------+---------+-------------+------+
+| 18 | 40018 | Yuna Yuniati | Perempuan     | Korea Selatan | 2003-12-09 |        4 |         4 | Jakarta |        40.9 |   20 |
++----+-------+--------------+---------------+---------------+------------+----------+-----------+---------+-------------+------+
+1 row in set (0.001 sec)
+
+24. MENAMPILKAN DATA PEGAWAI (UMUR >30 DAN LAHIR DI JAKARTA)
+
+MariaDB [dbpegawai]> SELECT * FROM pegawai WHERE umur>30 AND tmp_lahir = 'Jakarta';
++----+-------+---------------+---------------+-----------+------------+----------+-----------+---------+-------------+------+
+| id | nip   | nama          | jenis_kelamin | tmp_lahir | tgl_lahir  | iddivisi | idjabatan | alamat  | berat_badan | umur |
++----+-------+---------------+---------------+-----------+------------+----------+-----------+---------+-------------+------+
+|  6 | 20006 | Karina Maniez | Perempuan     | Jakarta   | 1989-06-09 |        2 |         1 | Kwangya |        67.4 |   34 |
+| 11 | 30011 | Siti Ryujin   | Perempuan     | Jakarta   | 1990-04-17 |        3 |         1 | Jakarta |        40.6 |   33 |
++----+-------+---------------+---------------+-----------+------------+----------+-----------+---------+-------------+------+
+2 rows in set (0.001 sec)
+
+25. MENAMPILKAN DATA PEGAWAI (DIVISI MARKETING, BERUMUR>30, DAN BERJENIS KELAMIN PEREMPUAN)
+
+MariaDB [dbpegawai]> SELECT * FROM pegawai WHERE iddivisi=3 AND umur>30 AND jenis_kelamin='Perempuan';
++----+-------+-------------+---------------+-----------+------------+----------+-----------+---------+-------------+------+
+| id | nip   | nama        | jenis_kelamin | tmp_lahir | tgl_lahir  | iddivisi | idjabatan | alamat  | berat_badan | umur |
++----+-------+-------------+---------------+-----------+------------+----------+-----------+---------+-------------+------+
+| 11 | 30011 | Siti Ryujin | Perempuan     | Jakarta   | 1990-04-17 |        3 |         1 | Jakarta |        40.6 |   33 |
+| 14 | 30014 | Aya Susanti | Perempuan     | Sulawesi  | 1993-01-12 |        3 |         4 | Citayam |        52.9 |   31 |
++----+-------+-------------+---------------+-----------+------------+----------+-----------+---------+-------------+------+
+2 rows in set (0.001 sec)
+
+26. MENAMPILKAN DATA PEGAWAI DENGNA KEY NIP :
+
+MariaDB [dbpegawai]> SELECT * FROM pegawai WHERE nip='30013';
++----+-------+----------------+---------------+-----------+------------+----------+-----------+---------+-------------+------+
+| id | nip   | nama           | jenis_kelamin | tmp_lahir | tgl_lahir  | iddivisi | idjabatan | alamat  | berat_badan | umur |
++----+-------+----------------+---------------+-----------+------------+----------+-----------+---------+-------------+------+
+| 13 | 30013 | Asahi Aseptian | Laki-laki     | Jakarta   | 2001-08-20 |        3 |         3 | Bandung |        56.8 |   22 |
++----+-------+----------------+---------------+-----------+------------+----------+-----------+---------+-------------+------+
+1 row in set (0.001 sec)
+
+~~
+MariaDB [dbpegawai]> SELECT * FROM pegawai ORDER BY nip;
++----+-------+------------------+---------------+----------------+------------+----------+-----------+---------------+-------------+------+
+| id | nip   | nama             | jenis_kelamin | tmp_lahir      | tgl_lahir  | iddivisi | idjabatan | alamat        | berat_badan | umur |
++----+-------+------------------+---------------+----------------+------------+----------+-----------+---------------+-------------+------+
+|  1 | 10001 | Watanabe Haruto  | Laki-laki     | Fukuoka        | 1982-04-05 |        1 |         2 | YG Ent        |        61.5 |   42 |
+|  2 | 10002 | Lee Taeyong      | Laki-laki     | Rumah Sakit    | 1995-07-01 |        1 |         1 | SM Tower      |          43 |   28 |
+|  3 | 10003 | Lee Haikal       | Laki-laki     | Korea Selatan  | 2000-06-06 |        1 |         3 | Citayam       |        50.6 |   23 |
+|  4 | 10004 | Ariel            | Perempuan     | Rumah Sakit    | 1991-06-10 |        1 |         3 | Danau Citayam |        53.9 |   32 |
+|  5 | 10005 | Susi Sulastri    | Perempuan     | Bojong         | 1998-08-12 |        1 |         4 | Bojong        |        47.8 |   25 |
+|  6 | 20006 | Karina Maniez    | Perempuan     | Jakarta        | 1989-06-09 |        2 |         1 | Kwangya       |        67.4 |   34 |
+|  7 | 20007 | Jefri Nackal     | Laki-laki     | Rumah Sakit    | 1983-10-25 |        2 |         2 | Bogor         |        63.3 |   40 |
+|  8 | 20008 | Muhammad Yuta    | Laki-laki     | Jepang         | 1995-11-20 |        2 |         3 | Cipayung      |        44.5 |   28 |
+|  9 | 20009 | Doby Soleh       | Laki-laki     | Bekasi         | 1980-12-04 |        2 |         3 | YG Ent        |        52.7 |   43 |
+| 10 | 20010 | Lisa Sulisa      | Perempuan     | Thailand       | 1997-03-27 |        2 |         4 | Depok         |        59.7 |   27 |
+| 11 | 30011 | Siti Ryujin      | Perempuan     | Jakarta        | 1990-04-17 |        3 |         1 | Jakarta       |        40.6 |   33 |
+| 12 | 30012 | Sumanto Santoso  | Laki-laki     | Purwakarta     | 1999-12-01 |        3 |         2 | Bandung       |        43.7 |   24 |
+| 13 | 30013 | Asahi Aseptian   | Laki-laki     | Jakarta        | 2001-08-20 |        3 |         3 | Bandung       |        56.8 |   22 |
+| 14 | 30014 | Aya Susanti      | Perempuan     | Sulawesi       | 1993-01-12 |        3 |         4 | Citayam       |        52.9 |   31 |
+| 15 | 30025 | Meimei Comel     | Perempuan     | Sawangan Depok | 1999-02-28 |        3 |         4 | Tangerang     |          54 |   25 |
+| 16 | 40016 | Muhammad Jaehyun | Laki-laki     | Depok          | 1997-02-14 |        4 |         1 | Bogor         |        41.4 |   27 |
+| 17 | 40017 | Mark Lee         | Laki-laki     | Jakarta        | 1999-08-02 |        4 |         2 | Kelapa Dua    |          65 |   24 |
+| 18 | 40018 | Yuna Yuniati     | Perempuan     | Korea Selatan  | 2003-12-09 |        4 |         4 | Jakarta       |        40.9 |   20 |
++----+-------+------------------+---------------+----------------+------------+----------+-----------+---------------+-------------+------+
+18 rows in set (0.001 sec)
+~~
+
+27. MENAMPILKAN DATA PEGAWAI DENGAN KLAUSA NON KEY (GENDER) :
+
+MariaDB [dbpegawai]> SELECT * FROM pegawai WHERE jenis_kelamin='Perempuan';
++----+-------+---------------+---------------+----------------+------------+----------+-----------+---------------+-------------+------+
+| id | nip   | nama          | jenis_kelamin | tmp_lahir      | tgl_lahir  | iddivisi | idjabatan | alamat        | berat_badan | umur |
++----+-------+---------------+---------------+----------------+------------+----------+-----------+---------------+-------------+------+
+|  4 | 10004 | Ariel         | Perempuan     | Rumah Sakit    | 1991-06-10 |        1 |         3 | Danau Citayam |        53.9 |   32 |
+|  5 | 10005 | Susi Sulastri | Perempuan     | Bojong         | 1998-08-12 |        1 |         4 | Bojong        |        47.8 |   25 |
+|  6 | 20006 | Karina Maniez | Perempuan     | Jakarta        | 1989-06-09 |        2 |         1 | Kwangya       |        67.4 |   34 |
+| 10 | 20010 | Lisa Sulisa   | Perempuan     | Thailand       | 1997-03-27 |        2 |         4 | Depok         |        59.7 |   27 |
+| 11 | 30011 | Siti Ryujin   | Perempuan     | Jakarta        | 1990-04-17 |        3 |         1 | Jakarta       |        40.6 |   33 |
+| 14 | 30014 | Aya Susanti   | Perempuan     | Sulawesi       | 1993-01-12 |        3 |         4 | Citayam       |        52.9 |   31 |
+| 15 | 30025 | Meimei Comel  | Perempuan     | Sawangan Depok | 1999-02-28 |        3 |         4 | Tangerang     |          54 |   25 |
+| 18 | 40018 | Yuna Yuniati  | Perempuan     | Korea Selatan  | 2003-12-09 |        4 |         4 | Jakarta       |        40.9 |   20 |
++----+-------+---------------+---------------+----------------+------------+----------+-----------+---------------+-------------+------+
+8 rows in set (0.001 sec)
+
+28. MENAMPILKAN DATA DENGAN KALUSA IN :
+
+MariaDB [dbpegawai]> SELECT * FROM pegawai WHERE nip IN ('10005', '20009', '40017', '20006');
++----+-------+---------------+---------------+-----------+------------+----------+-----------+------------+-------------+------+
+| id | nip   | nama          | jenis_kelamin | tmp_lahir | tgl_lahir  | iddivisi | idjabatan | alamat     | berat_badan | umur |
++----+-------+---------------+---------------+-----------+------------+----------+-----------+------------+-------------+------+
+|  5 | 10005 | Susi Sulastri | Perempuan     | Bojong    | 1998-08-12 |        1 |         4 | Bojong     |        47.8 |   25 |
+|  6 | 20006 | Karina Maniez | Perempuan     | Jakarta   | 1989-06-09 |        2 |         1 | Kwangya    |        67.4 |   34 |
+|  9 | 20009 | Doby Soleh    | Laki-laki     | Bekasi    | 1980-12-04 |        2 |         3 | YG Ent     |        52.7 |   43 |
+| 17 | 40017 | Mark Lee      | Laki-laki     | Jakarta   | 1999-08-02 |        4 |         2 | Kelapa Dua |          65 |   24 |
++----+-------+---------------+---------------+-----------+------------+----------+-----------+------------+-------------+------+
+4 rows in set (0.001 sec)
+
+29. MENAMPILKAN DATA DENGAN KLAUSA NOT IN :
+
+MariaDB [dbpegawai]> SELECT * FROM pegawai WHERE tmp_lahir NOT IN ('Jakarta');
++----+-------+------------------+---------------+----------------+------------+----------+-----------+---------------+-------------+------+
+| id | nip   | nama             | jenis_kelamin | tmp_lahir      | tgl_lahir  | iddivisi | idjabatan | alamat        | berat_badan | umur |
++----+-------+------------------+---------------+----------------+------------+----------+-----------+---------------+-------------+------+
+|  1 | 10001 | Watanabe Haruto  | Laki-laki     | Fukuoka        | 1982-04-05 |        1 |         2 | YG Ent        |        61.5 |   42 |
+|  2 | 10002 | Lee Taeyong      | Laki-laki     | Rumah Sakit    | 1995-07-01 |        1 |         1 | SM Tower      |          43 |   28 |
+|  3 | 10003 | Lee Haikal       | Laki-laki     | Korea Selatan  | 2000-06-06 |        1 |         3 | Citayam       |        50.6 |   23 |
+|  4 | 10004 | Ariel            | Perempuan     | Rumah Sakit    | 1991-06-10 |        1 |         3 | Danau Citayam |        53.9 |   32 |
+|  5 | 10005 | Susi Sulastri    | Perempuan     | Bojong         | 1998-08-12 |        1 |         4 | Bojong        |        47.8 |   25 |
+|  7 | 20007 | Jefri Nackal     | Laki-laki     | Rumah Sakit    | 1983-10-25 |        2 |         2 | Bogor         |        63.3 |   40 |
+|  8 | 20008 | Muhammad Yuta    | Laki-laki     | Jepang         | 1995-11-20 |        2 |         3 | Cipayung      |        44.5 |   28 |
+|  9 | 20009 | Doby Soleh       | Laki-laki     | Bekasi         | 1980-12-04 |        2 |         3 | YG Ent        |        52.7 |   43 |
+| 10 | 20010 | Lisa Sulisa      | Perempuan     | Thailand       | 1997-03-27 |        2 |         4 | Depok         |        59.7 |   27 |
+| 12 | 30012 | Sumanto Santoso  | Laki-laki     | Purwakarta     | 1999-12-01 |        3 |         2 | Bandung       |        43.7 |   24 |
+| 14 | 30014 | Aya Susanti      | Perempuan     | Sulawesi       | 1993-01-12 |        3 |         4 | Citayam       |        52.9 |   31 |
+| 15 | 30025 | Meimei Comel     | Perempuan     | Sawangan Depok | 1999-02-28 |        3 |         4 | Tangerang     |          54 |   25 |
+| 16 | 40016 | Muhammad Jaehyun | Laki-laki     | Depok          | 1997-02-14 |        4 |         1 | Bogor         |        41.4 |   27 |
+| 18 | 40018 | Yuna Yuniati     | Perempuan     | Korea Selatan  | 2003-12-09 |        4 |         4 | Jakarta       |        40.9 |   20 |
++----+-------+------------------+---------------+----------------+------------+----------+-----------+---------------+-------------+------+
+14 rows in set (0.001 sec)
+
+30. MENAMPILKAN DATA BERDASARKAN ASCENDING :
+
+MariaDB [dbpegawai]> SELECT * FROM pegawai ORDER BY nama ASC;
++----+-------+------------------+---------------+----------------+------------+----------+-----------+---------------+-------------+------+
+| id | nip   | nama             | jenis_kelamin | tmp_lahir      | tgl_lahir  | iddivisi | idjabatan | alamat        | berat_badan | umur |
++----+-------+------------------+---------------+----------------+------------+----------+-----------+---------------+-------------+------+
+|  4 | 10004 | Ariel            | Perempuan     | Rumah Sakit    | 1991-06-10 |        1 |         3 | Danau Citayam |        53.9 |   32 |
+| 13 | 30013 | Asahi Aseptian   | Laki-laki     | Jakarta        | 2001-08-20 |        3 |         3 | Bandung       |        56.8 |   22 |
+| 14 | 30014 | Aya Susanti      | Perempuan     | Sulawesi       | 1993-01-12 |        3 |         4 | Citayam       |        52.9 |   31 |
+|  9 | 20009 | Doby Soleh       | Laki-laki     | Bekasi         | 1980-12-04 |        2 |         3 | YG Ent        |        52.7 |   43 |
+|  7 | 20007 | Jefri Nackal     | Laki-laki     | Rumah Sakit    | 1983-10-25 |        2 |         2 | Bogor         |        63.3 |   40 |
+|  6 | 20006 | Karina Maniez    | Perempuan     | Jakarta        | 1989-06-09 |        2 |         1 | Kwangya       |        67.4 |   34 |
+|  3 | 10003 | Lee Haikal       | Laki-laki     | Korea Selatan  | 2000-06-06 |        1 |         3 | Citayam       |        50.6 |   23 |
+|  2 | 10002 | Lee Taeyong      | Laki-laki     | Rumah Sakit    | 1995-07-01 |        1 |         1 | SM Tower      |          43 |   28 |
+| 10 | 20010 | Lisa Sulisa      | Perempuan     | Thailand       | 1997-03-27 |        2 |         4 | Depok         |        59.7 |   27 |
+| 17 | 40017 | Mark Lee         | Laki-laki     | Jakarta        | 1999-08-02 |        4 |         2 | Kelapa Dua    |          65 |   24 |
+| 15 | 30025 | Meimei Comel     | Perempuan     | Sawangan Depok | 1999-02-28 |        3 |         4 | Tangerang     |          54 |   25 |
+| 16 | 40016 | Muhammad Jaehyun | Laki-laki     | Depok          | 1997-02-14 |        4 |         1 | Bogor         |        41.4 |   27 |
+|  8 | 20008 | Muhammad Yuta    | Laki-laki     | Jepang         | 1995-11-20 |        2 |         3 | Cipayung      |        44.5 |   28 |
+| 11 | 30011 | Siti Ryujin      | Perempuan     | Jakarta        | 1990-04-17 |        3 |         1 | Jakarta       |        40.6 |   33 |
+| 12 | 30012 | Sumanto Santoso  | Laki-laki     | Purwakarta     | 1999-12-01 |        3 |         2 | Bandung       |        43.7 |   24 |
+|  5 | 10005 | Susi Sulastri    | Perempuan     | Bojong         | 1998-08-12 |        1 |         4 | Bojong        |        47.8 |   25 |
+|  1 | 10001 | Watanabe Haruto  | Laki-laki     | Fukuoka        | 1982-04-05 |        1 |         2 | YG Ent        |        61.5 |   42 |
+| 18 | 40018 | Yuna Yuniati     | Perempuan     | Korea Selatan  | 2003-12-09 |        4 |         4 | Jakarta       |        40.9 |   20 |
++----+-------+------------------+---------------+----------------+------------+----------+-----------+---------------+-------------+------+
+18 rows in set (0.001 sec)
+
+31. MENAMPILKAN DATA DARI BERAT BADAN TERGEMUK HINGGA TERKURUS :
+
+MariaDB [dbpegawai]> SELECT * FROM pegawai ORDER BY berat_badan DESC;
++----+-------+------------------+---------------+----------------+------------+----------+-----------+---------------+-------------+------+
+| id | nip   | nama             | jenis_kelamin | tmp_lahir      | tgl_lahir  | iddivisi | idjabatan | alamat        | berat_badan | umur |
++----+-------+------------------+---------------+----------------+------------+----------+-----------+---------------+-------------+------+
+|  6 | 20006 | Karina Maniez    | Perempuan     | Jakarta        | 1989-06-09 |        2 |         1 | Kwangya       |        67.4 |   34 |
+| 17 | 40017 | Mark Lee         | Laki-laki     | Jakarta        | 1999-08-02 |        4 |         2 | Kelapa Dua    |          65 |   24 |
+|  7 | 20007 | Jefri Nackal     | Laki-laki     | Rumah Sakit    | 1983-10-25 |        2 |         2 | Bogor         |        63.3 |   40 |
+|  1 | 10001 | Watanabe Haruto  | Laki-laki     | Fukuoka        | 1982-04-05 |        1 |         2 | YG Ent        |        61.5 |   42 |
+| 10 | 20010 | Lisa Sulisa      | Perempuan     | Thailand       | 1997-03-27 |        2 |         4 | Depok         |        59.7 |   27 |
+| 13 | 30013 | Asahi Aseptian   | Laki-laki     | Jakarta        | 2001-08-20 |        3 |         3 | Bandung       |        56.8 |   22 |
+| 15 | 30025 | Meimei Comel     | Perempuan     | Sawangan Depok | 1999-02-28 |        3 |         4 | Tangerang     |          54 |   25 |
+|  4 | 10004 | Ariel            | Perempuan     | Rumah Sakit    | 1991-06-10 |        1 |         3 | Danau Citayam |        53.9 |   32 |
+| 14 | 30014 | Aya Susanti      | Perempuan     | Sulawesi       | 1993-01-12 |        3 |         4 | Citayam       |        52.9 |   31 |
+|  9 | 20009 | Doby Soleh       | Laki-laki     | Bekasi         | 1980-12-04 |        2 |         3 | YG Ent        |        52.7 |   43 |
+|  3 | 10003 | Lee Haikal       | Laki-laki     | Korea Selatan  | 2000-06-06 |        1 |         3 | Citayam       |        50.6 |   23 |
+|  5 | 10005 | Susi Sulastri    | Perempuan     | Bojong         | 1998-08-12 |        1 |         4 | Bojong        |        47.8 |   25 |
+|  8 | 20008 | Muhammad Yuta    | Laki-laki     | Jepang         | 1995-11-20 |        2 |         3 | Cipayung      |        44.5 |   28 |
+| 12 | 30012 | Sumanto Santoso  | Laki-laki     | Purwakarta     | 1999-12-01 |        3 |         2 | Bandung       |        43.7 |   24 |
+|  2 | 10002 | Lee Taeyong      | Laki-laki     | Rumah Sakit    | 1995-07-01 |        1 |         1 | SM Tower      |          43 |   28 |
+| 16 | 40016 | Muhammad Jaehyun | Laki-laki     | Depok          | 1997-02-14 |        4 |         1 | Bogor         |        41.4 |   27 |
+| 18 | 40018 | Yuna Yuniati     | Perempuan     | Korea Selatan  | 2003-12-09 |        4 |         4 | Jakarta       |        40.9 |   20 |
+| 11 | 30011 | Siti Ryujin      | Perempuan     | Jakarta        | 1990-04-17 |        3 |         1 | Jakarta       |        40.6 |   33 |
++----+-------+------------------+---------------+----------------+------------+----------+-----------+---------------+-------------+------+
+18 rows in set (0.001 sec)
+
+32. MENAMPILKAN DATA 5 PEGAWAI TERATAS : 
+
+MariaDB [dbpegawai]> SELECT * FROM pegawai LIMIT 5;
++----+-------+-----------------+---------------+---------------+------------+----------+-----------+---------------+-------------+------+
+| id | nip   | nama            | jenis_kelamin | tmp_lahir     | tgl_lahir  | iddivisi | idjabatan | alamat        | berat_badan | umur |
++----+-------+-----------------+---------------+---------------+------------+----------+-----------+---------------+-------------+------+
+|  1 | 10001 | Watanabe Haruto | Laki-laki     | Fukuoka       | 1982-04-05 |        1 |         2 | YG Ent        |        61.5 |   42 |
+|  2 | 10002 | Lee Taeyong     | Laki-laki     | Rumah Sakit   | 1995-07-01 |        1 |         1 | SM Tower      |          43 |   28 |
+|  3 | 10003 | Lee Haikal      | Laki-laki     | Korea Selatan | 2000-06-06 |        1 |         3 | Citayam       |        50.6 |   23 |
+|  4 | 10004 | Ariel           | Perempuan     | Rumah Sakit   | 1991-06-10 |        1 |         3 | Danau Citayam |        53.9 |   32 |
+|  5 | 10005 | Susi Sulastri   | Perempuan     | Bojong        | 1998-08-12 |        1 |         4 | Bojong        |        47.8 |   25 |
++----+-------+-----------------+---------------+---------------+------------+----------+-----------+---------------+-------------+------+
+5 rows in set (0.001 sec)
+
+33. MENAMPILKAN DATA 5 PEGAWAI TERBAWAH :
+
+MariaDB [dbpegawai]> SELECT * FROM pegawai LIMIT 5 OFFSET 13;
++----+-------+------------------+---------------+----------------+------------+----------+-----------+------------+-------------+------+
+| id | nip   | nama             | jenis_kelamin | tmp_lahir      | tgl_lahir  | iddivisi | idjabatan | alamat     | berat_badan | umur |
++----+-------+------------------+---------------+----------------+------------+----------+-----------+------------+-------------+------+
+| 14 | 30014 | Aya Susanti      | Perempuan     | Sulawesi       | 1993-01-12 |        3 |         4 | Citayam    |        52.9 |   31 |
+| 15 | 30025 | Meimei Comel     | Perempuan     | Sawangan Depok | 1999-02-28 |        3 |         4 | Tangerang  |          54 |   25 |
+| 16 | 40016 | Muhammad Jaehyun | Laki-laki     | Depok
+ | 1997-02-14 |        4 |         1 | Bogor      |        41.4 |   27 |
+| 17 | 40017 | Mark Lee         | Laki-laki     | Jakarta        | 1999-08-02 |        4 |         2 | Kelapa Dua |          65 |   24 |
+| 18 | 40018 | Yuna Yuniati     | Perempuan     | Korea Selatan  | 2003-12-09 |        4 |         4 | Jakarta    |        40.9 |   20 |
++----+-------+------------------+---------------+----------------+------------+----------+-----------+------------+-------------+------+
+5 rows in set (0.001 sec)
+
+34. MENAMPILKAN JUMLAH PEGAWAI (COUNT) :
+
+MariaDB [dbpegawai]> SELECT COUNT(*) AS jumlah_pegawai FROM pega
+wai;
++----------------+
+| jumlah_pegawai |
++----------------+
+|             18 |
++----------------+
+1 row in set (0.001 sec)
+
+35. MENAMPILKAN NIP, NAMA, DAN UMUR TERTUA :
+
+MariaDB [dbpegawai]> SELECT nip, nama, umur FROM pegawai WHERE umur = (SELECT MAX(umur) FROM pegawai);
++-------+------------+------+
+| nip   | nama       | umur |
++-------+------------+------+
+| 20009 | Doby Soleh |   43 |
++-------+------------+------+
+1 row in set (0.001 sec)
+
+36. MENMAPILKAN NIP, NAMA, DAN BERAT BADAN TERKURUS :
+
+MariaDB [dbpegawai]> SELECT nip, nama, berat_badan FROM pegawai
+WHERE berat_badan = (SELECT MIN(berat_badan) FROM pegawai);
++-------+-------------+-------------+
+| nip   | nama        | berat_badan |
++-------+-------------+-------------+
+| 30011 | Siti Ryujin |        40.6 |
++-------+-------------+-------------+
+1 row in set (0.001 sec)
+
+37. MENAMPILKAN RATA RATA UMUR PEGAWAI :
+
+MariaDB [dbpegawai]> SELECT AVG (umur) AS rata_rata_umur_pegawai FROM pegawai;
++------------------------+
+| rata_rata_umur_pegawai |
++------------------------+
+|                29.3333 |
++------------------------+
+1 row in set (0.001 sec)
+
+38. MENAMPILKAN DATA JUMLAH PEGAWAI BERUSIA > 40 DAN BERJABATAN MANAJER :
+
+MariaDB [dbpegawai]> SELECT COUNT(*) AS jumlah_pegawai_terdata FROM pegawai WHERE jenis_kelamin='Laki-laki' AND umur>40 AND idjabatan=2;
++------------------------+
+| jumlah_pegawai_terdata |
++------------------------+
+|                      1 |
++------------------------+
+1 row in set (0.001 sec)
+
+39. MENAMPILKAN JUMLAH DATA PEGAWAI BERUSIA < 40 DAN BERJABATAN STAFF :
+
+MariaDB [dbpegawai]> SELECT COUNT(*) AS jumlah_pegawai_terdata FROM pegawai WHERE jenis_kelamin='Perempuan' AND umur<40 AND idjabatan=4;
++------------------------+
+| jumlah_pegawai_terdata |
++------------------------+
+|                      5 |
++------------------------+
+1 row in set (0.001 sec)
+
+40. MENAMPILKAN JUMLAH DATA PEGAWAI PEREMPUAN :
+
+MariaDB [dbpegawai]> SELECT COUNT(*) AS jumlah_pegawai_perempuan FROM pegawai WHERE jenis_kelamin='Perempuan';
++--------------------------+
+| jumlah_pegawai_perempuan |
++--------------------------+
+|                        8 |
++--------------------------+
+1 row in set (0.001 sec)
+
+41. MENAMPILKAN JUMLAH PEGAWAI YANG BEKERJA DI DIVISI SDM :
+
+MariaDB [dbpegawai]> SELECT SUM(iddivisi=1) AS jumlah_pegawai_SDM FROM pegawai WHERE iddivisi=1;
++--------------------+
+| jumlah_pegawai_SDM |
++--------------------+
+|                  5 |
++--------------------+
+1 row in set (0.001 sec)
+
+42. MENMAPILKAN JUMLAH PEGAWAI BERDASARKAN DIVISINYA :
+
+MariaDB [dbpegawai]> SELECT iddivisi, COUNT(*) AS jumlah_pegawai_perdivisi FROM pegawai GROUP BY iddivisi;
++----------+--------------------------+
+| iddivisi | jumlah_pegawai_perdivisi |
++----------+--------------------------+
+|        1 |                        5 |
+|        2 |                        5 |
+|        3 |                        5 |
+|        4 |                        3 |
++----------+--------------------------+
+4 rows in set (0.001 sec)
+
+43. MENAMPILKAN JUMLAH PEGAWAI BERDASARKAN GENDER YANG JUMLAHNYA MINIMAL 10 :
+
+MariaDB [dbpegawai]> SELECT jenis_kelamin, COUNT(*) AS jumlah_pegawai_terdata FROM pegawai GROUP BY jenis_kelamin HAVING COUNT(*) >=10;
++---------------+------------------------+
+| jenis_kelamin | jumlah_pegawai_terdata |
++---------------+------------------------+
+| Laki-laki     |                     10 |
++---------------+------------------------+
+1 row in set (0.001 sec)
+
+44. CARI DATA PEGAWAI BERAWALAN KATA 'MUHAMMAD' :
+
+MariaDB [dbpegawai]> SELECT * FROM pegawai WHERE nama LIKE 'Muhammad%';
++----+-------+------------------+---------------+-----------+------------+----------+-----------+----------+-------------+------+
+| id | nip   | nama             | jenis_kelamin | tmp_lahir | tgl_lahir  | iddivisi | idjabatan | alamat   | berat_badan | umur |
++----+-------+------------------+---------------+-----------+------------+----------+-----------+----------+-------------+------+
+|  8 | 20008 | Muhammad Yuta    | Laki-laki     | Jepang    | 1995-11-20 |        2 |         3 | Cipayung |        44.5 |   28 |
+| 16 | 40016 | Muhammad Jaehyun | Laki-laki     | Depok     | 1997-02-14 |        4 |         1 | Bogor    |        41.4 |   27 |
++----+-------+------------------+---------------+-----------+------------+----------+-----------+----------+-------------+------+
+2 rows in set (0.001 sec)
+
+45. CARI DATA PEGAWAI BERAKHIRAN 'SANTOSO' :
+
+MariaDB [dbpegawai]> SELECT * FROM pegawai WHERE nama LIKE '%Santoso';
++----+-------+-----------------+---------------+------------+------------+----------+-----------+---------+-------------+------+
+| id | nip   | nama            | jenis_kelamin | tmp_lahir  | tgl_lahir  | iddivisi | idjabatan | alamat  | berat_badan | umur |
++----+-------+-----------------+---------------+------------+------------+----------+-----------+---------+-------------+------+
+| 12 | 30012 | Sumanto Santoso | Laki-laki     | Purwakarta | 1999-12-01 |        3 |         2 | Bandung |        43.7 |   24 |
++----+-------+-----------------+---------------+------------+------------+----------+-----------+---------+-------------+------+
+1 row in set (0.001 sec)
+
+46. CARI DATA PEGAWAI MENGANDUNG KATA 'ASEP' :
+
+MariaDB [dbpegawai]> SELECT * FROM pegawai WHERE nama LIKE '%Asep%';
++----+-------+----------------+---------------+-----------+------------+----------+-----------+---------+-------------+------+
+| id | nip   | nama           | jenis_kelamin | tmp_lahir | tgl_lahir  | iddivisi | idjabatan | alamat  | berat_badan | umur |
++----+-------+----------------+---------------+-----------+------------+----------+-----------+---------+-------------+------+
+| 13 | 30013 | Asahi Aseptian | Laki-laki     | Jakarta   | 2001-08-20 |        3 |         3 | Bandung |        56.8 |   22 |
++----+-------+----------------+---------------+-----------+------------+----------+-----------+---------+-------------+------+
+1 row in set (0.001 sec)
+
+47. CARI DATA PEGAWAI YANG HURUF KELIMANYA S :
+
+MariaDB [dbpegawai]> SELECT * FROM pegawai WHERE nama LIKE '____s%';
++----+-------+-------------+---------------+-----------+------------+----------+-----------+---------+-------------+------+
+| id | nip   | nama        | jenis_kelamin | tmp_lahir | tgl_lahir  | iddivisi | idjabatan | alamat  | berat_badan | umur |
++----+-------+-------------+---------------+-----------+------------+----------+-----------+---------+-------------+------+
+| 14 | 30014 | Aya Susanti | Perempuan     | Sulawesi  | 1993-01-12 |        3 |         4 | Citayam |        52.9 |   31 |
++----+-------+-------------+---------------+-----------+------------+----------+-----------+---------+-------------+------+
+1 row in set (0.001 sec)
+
